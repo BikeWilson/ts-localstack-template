@@ -1,0 +1,78 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: >-
+  sam-ts-app
+Transform:
+- AWS::Serverless-2016-10-31
+Globals:
+  Function:
+    Timeout: 15
+
+    Tracing: Active
+    # You can add LoggingConfig parameters such as the Logformat, Log Group, and SystemLogLevel or ApplicationLogLevel. Learn more here https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-resource-function.html#sam-function-loggingconfig.
+    LoggingConfig:
+      LogFormat: JSON
+  Api:
+    TracingEnabled: true
+
+Resources:
+  GetAllItemsFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: sam-ts-app/
+      Handler: app.lambdaHandler
+      Runtime: nodejs18.x
+      Architectures:
+      - x86_64
+      Environment:
+        Variables:
+          ENVIRONMENT: local
+          AWS_DEFAULT_REGION: us-east-1
+      MemorySize: 128
+      Timeout: 100
+      Description: A simple example includes a HTTP get method to get all items
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /simplePost
+            Method: POST
+    Metadata: # Manage esbuild properties
+      BuildMethod: esbuild
+      BuildProperties:
+        Minify: true
+        Target: es2020
+        Sourcemap: true
+        EntryPoints:
+        - app.ts
+
+  S3UploadBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: myBucket
+      CorsConfiguration:
+        CorsRules:
+          - AllowedHeaders:
+              - "*"
+            AllowedMethods:
+              - GET
+              - PUT
+              - HEAD
+            AllowedOrigins:
+              - "*"
+Outputs:
+  GetAllItems:
+    Description: API Gateway endpoint URL for Prod stage
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/"
+# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
+  # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
+  # Find out more about other implicit resources you can reference within SAM
+  # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
+  GetAllItemsFunction:
+    Description: Get all items
+    Value: !GetAtt GetAllItemsFunction.Arn
+  GetAllItemsFunctionIamRole:
+    Description: Implicit IAM Role
+    Value: !GetAtt GetAllItemsFunctionRole.Arn
+  S3UploadBucket:
+    Description: S3 Bucket used for test output retrieval
+    Value: !GetAtt S3UploadBucket.Arn

@@ -1,0 +1,24 @@
+version: '3.9'
+
+services:
+  localstack:
+    image: localstack/localstack:latest
+    container_name: localstack
+    privileged: true
+    ports:
+      - "4566:4566"
+    environment:
+      - SERVICES=cloudformation,iam,lambda,apigateway,s3,cloudwatch
+      - DATA_DIR=./tmp/localstack/data
+      - DEBUG=true
+      - DOCKER_HOST=unix:///var/run/docker.sock
+      - AWS_DEFAULT_REGION=us-west-1
+      - LAMBDA_EXECUTOR=${LAMBDA_EXECUTOR-docker}
+      # tmpfs:
+      # - /tmp/localstack:exec,mode=600
+    volumes:
+      # - './tmp/localstack:/tmp/localstack'
+      - '/var/run/docker.sock:/var/run/docker.sock'
+      # networks:
+      #   localstack:
+      #     name: localstack
