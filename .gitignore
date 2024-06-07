@@ -131,3 +131,5 @@ dist
 
 #AWS SAM
 .aws-sam
+.DS_Store
+sa-ts-app/.DS_Store
