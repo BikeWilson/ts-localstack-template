@@ -5,7 +5,6 @@ export const lambdaHandler = async (event: APIGatewayProxyEvent): Promise<APIGat
 
         console.log('EVENT: \n' + JSON.stringify(event, null, 2));
         if (event.body){
-            //do the s3 logic here
             console.log('Success!');
         }
 
@@ -15,6 +14,7 @@ export const lambdaHandler = async (event: APIGatewayProxyEvent): Promise<APIGat
                 message: 'Succeeded',
             }),
         };
+        
     } catch (err) {
         console.log(err);
         return {

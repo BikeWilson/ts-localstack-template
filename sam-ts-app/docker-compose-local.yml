@@ -8,7 +8,7 @@ services:
     ports:
       - "4566:4566"
     environment:
-      - SERVICES=cloudformation,iam,lambda,apigateway,s3,cloudwatch
+      - SERVICES=cloudformation,iam,lambda,apigateway,s3,cloudwatch,ssm
       - DATA_DIR=./tmp/localstack/data
       - DEBUG=true
       - DOCKER_HOST=unix:///var/run/docker.sock
