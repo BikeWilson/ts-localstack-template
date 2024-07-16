@@ -1,6 +1,6 @@
-# ts-localstack-sam
+# ts-localstack-cdk
 
-The purpose of this project is to see how CDk can be locally tested using localstack.</br>
+The purpose of this project is to see how CDK can be locally tested using localstack.</br>
 There is no further implementation in this project other than setting up a lambda, api gateway and s3 bucket using cdk and then deploying it locally via localstack.
 
 # Pre-requisites
